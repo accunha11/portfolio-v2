@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FilterIcon, SearchIcon } from "lucide-react"
 
 import {
@@ -28,9 +28,12 @@ import {
 } from "@/components/ui/input-group"
 import { blogItems } from "@/app/blog/blog-posts"
 
+const ITEMS_PER_PAGE = 9
+
 export default function BlogPage() {
   const [query, setQuery] = useState("")
   const [selectedBadges, setSelectedBadges] = useState<string[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
 
   const badgeOptions = useMemo(() => {
     const categories = Array.from(
@@ -77,6 +80,22 @@ export default function BlogPage() {
       return matchesSearch && matchesBadgeFilter
     })
   }, [query, selectedBadges])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [query, selectedBadges])
+
+  const totalPages = Math.max(1, Math.ceil(filteredBlogItems.length / ITEMS_PER_PAGE))
+  const paginatedBlogItems = filteredBlogItems.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+    }
+  }, [currentPage, totalPages])
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16">
@@ -178,7 +197,7 @@ export default function BlogPage() {
         </InputGroup>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredBlogItems.map((project) => (
+          {paginatedBlogItems.map((project) => (
             <Link key={project.slug} href={`/blog/${project.slug}`} className="text-left">
               <Card className="h-full cursor-pointer transition-colors hover:bg-muted/30">
                 <CardHeader>
@@ -201,6 +220,42 @@ export default function BlogPage() {
             </Link>
           ))}
         </div>
+
+        {filteredBlogItems.length > ITEMS_PER_PAGE && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+
+            {Array.from({ length: totalPages }, (_, index) => {
+              const pageNumber = index + 1
+              return (
+                <Button
+                  key={pageNumber}
+                  variant={pageNumber === currentPage ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentPage(pageNumber)}
+                >
+                  {pageNumber}
+                </Button>
+              )
+            })}
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
+          </div>
+        )}
 
         {filteredBlogItems.length === 0 && (
           <p className="text-sm text-muted-foreground">

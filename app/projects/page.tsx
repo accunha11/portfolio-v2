@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FaGithub } from "react-icons/fa"
 import { HiOutlineDocumentText } from "react-icons/hi2"
 import { FilterIcon, SearchIcon } from "lucide-react"
@@ -37,6 +37,8 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
+
+const ITEMS_PER_PAGE = 9
 
 type Project = {
   title: string
@@ -191,6 +193,7 @@ const projects: Project[] = [
 export default function ProjectsPage() {
   const [query, setQuery] = useState("")
   const [selectedBadges, setSelectedBadges] = useState<string[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
 
   const badgeOptions = useMemo(() => {
     const categories = Array.from(new Set(projects.map((project) => project.category)))
@@ -236,6 +239,22 @@ export default function ProjectsPage() {
       return matchesSearch && matchesBadgeFilter
     })
   }, [query, selectedBadges])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [query, selectedBadges])
+
+  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / ITEMS_PER_PAGE))
+  const paginatedProjects = filteredProjects.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+    }
+  }, [currentPage, totalPages])
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16">
@@ -337,7 +356,7 @@ export default function ProjectsPage() {
         </InputGroup>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => (
+          {paginatedProjects.map((project) => (
             <Dialog key={project.title}>
               <DialogTrigger asChild>
                 <button className="cursor-pointer text-left">
@@ -418,6 +437,42 @@ export default function ProjectsPage() {
             </Dialog>
           ))}
         </div>
+
+        {filteredProjects.length > ITEMS_PER_PAGE && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+
+            {Array.from({ length: totalPages }, (_, index) => {
+              const pageNumber = index + 1
+              return (
+                <Button
+                  key={pageNumber}
+                  variant={pageNumber === currentPage ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentPage(pageNumber)}
+                >
+                  {pageNumber}
+                </Button>
+              )
+            })}
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
+          </div>
+        )}
 
         {filteredProjects.length === 0 && (
           <p className="text-sm text-muted-foreground">
