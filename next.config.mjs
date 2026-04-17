@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
-const isGithubActions = process.env.GITHUB_ACTIONS === "true"
-const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? ""
-const isUserOrOrgPage = repoName.endsWith(".github.io")
-const basePath =
-  isGithubActions && !isUserOrOrgPage && repoName ? `/${repoName}` : ""
+const basePath = process.env.NEXT_BASE_PATH ?? ""
 
 const nextConfig = {
   output: "export",
