@@ -91,3 +91,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </main>
   )
 }
+
+export function generateStaticParams() {
+  return blogItems.map((post) => ({
+    slug: post.slug,
+  }))
+}
