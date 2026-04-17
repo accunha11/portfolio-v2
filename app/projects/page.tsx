@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useMemo, useState } from "react"
 import { FaGithub } from "react-icons/fa"
 import { HiOutlineDocumentText } from "react-icons/hi2"
@@ -391,7 +392,7 @@ export default function ProjectsPage() {
                       </a>
                     )}
                     {project.paperUrl && (
-                      <a
+                      <Link
                         href={project.paperUrl}
                         target="_blank"
                         rel="noreferrer"
@@ -399,7 +400,7 @@ export default function ProjectsPage() {
                         className="text-muted-foreground transition-colors hover:text-foreground"
                       >
                         <HiOutlineDocumentText className="size-5" />
-                      </a>
+                      </Link>
                     )}
                   </div>
                 )}

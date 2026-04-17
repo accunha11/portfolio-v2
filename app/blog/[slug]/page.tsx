@@ -59,7 +59,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </a>
               )}
               {post.paperUrl && (
-                <a
+                <Link
                   href={post.paperUrl}
                   target="_blank"
                   rel="noreferrer"
@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   className="text-muted-foreground transition-colors hover:text-foreground"
                 >
                   <HiOutlineDocumentText className="size-5" />
-                </a>
+                </Link>
               )}
             </div>
           )}
