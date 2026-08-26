@@ -1,21 +1,23 @@
-# Next.js template
+# portfolio-v2
 
-This is a Next.js template with shadcn/ui.
+Personal site for Ana Carolina Cunha, built with Next.js, Tailwind CSS and shadcn/ui. Deployed as a static export to GitHub Pages by `.github/workflows`.
 
-## Adding components
-
-To add components to your app, run the following command:
+## Development
 
 ```bash
-npx shadcn@latest add button
+npm install
+npm run dev      # dev server
+npm run build    # static export to ./out
+npm run lint
+npm run typecheck
 ```
 
-This will place the ui components in the `components` directory.
+## Content
 
-## Using components
+Page content lives in data files rather than in the components:
 
-To use the components in your app, import them as follows:
+- `app/projects/projects.ts` — research and project entries, rendered by `app/projects/page.tsx`
+- `app/blog/blog-posts.ts` — blog posts, rendered by `app/blog/page.tsx` and `app/blog/[slug]/page.tsx`
+- `public/pdfs/` — papers and reports linked from both
 
-```tsx
-import { Button } from "@/components/ui/button";
-```
+A project links to its post through `blogSlug`, and each post finds its project by reversing that lookup, so the relationship is defined once in `projects.ts`.

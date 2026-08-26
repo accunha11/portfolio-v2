@@ -25,17 +25,17 @@ export default function Page() {
 
           <div className="space-y-4 text-base leading-7 text-muted-foreground">
             <p>
-              Hi, I&apos;m Ana. I&apos;m currently an AI Engineer at BMW, where I get to
-              build real-world AI systems and see how intelligent tools can make
-              a meaningful impact. What excites me most is bridging practical
-              work with deeper exploration, and I&apos;m especially motivated by the
-              long-term goal of moving further into AI research.
+              Hi, I&apos;m Ana. I&apos;m an AI engineer at BMW, building language model
+              systems over engineering data. The work I care about most is
+              research, mostly on how these models fail and what their internals
+              represent.
             </p>
             <p>
-              Academically, I hold a Bachelor&apos;s degree in Cognitive Science
-              from UC San Diego, with a specialization in machine learning and
-              neural networks. I&apos;m currently pursuing a Master&apos;s in Informatics
-              at TUM, focused on machine learning and analytics.
+              I studied Cognitive Science at UC San Diego, specializing in
+              machine learning and neural networks, and I&apos;m finishing a
+              Master&apos;s in Informatics at TUM. Recent work has been on credit
+              assignment in reasoning models, evaluation robustness for medical
+              LLMs, and unsupervised structure in genome models.
             </p>
           </div>
 
@@ -61,14 +61,14 @@ export default function Page() {
                 Latest Research
               </p>
               <div className="space-y-1 text-sm">
-                <p>Increasing Reward Quality &amp; Density for Verifiable Rewards</p>
-                <p>Prompt optimization in medical llm benchamarks</p>
+                <p>Master–Novice Divergence for Reward Densification</p>
+                <p>Prompt Optimization in Medical LLM Benchmarks</p>
               </div>
               <Link
                 href="/projects"
                 className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
-                View projects
+                View research &amp; projects
                 <ArrowRightIcon className="size-4" />
               </Link>
             </div>
